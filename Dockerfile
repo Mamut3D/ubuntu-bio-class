@@ -10,5 +10,5 @@ RUN /tmp/InstallScript.sh
 EXPOSE 8787
 
 #Run server
-CMD ["/usr/lib/rstudio-server/bin/rserver","--server-daemonize 0"]
+CMD ["/usr/lib/rstudio-server/bin/rserver","--server-daemonize","0"]
 
