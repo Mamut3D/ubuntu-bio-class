@@ -39,6 +39,14 @@ wget https://download1.rstudio.org/rstudio-0.99.892-amd64.deb -P $HOME/
 dpkg -i $HOME/rstudio-0.99.892-amd64.deb
 rm -rf $HOME/rstudio-0.99.892-amd64.deb
 
+
+#Server install
+apt-get install gdebi-core -y
+wget https://download2.rstudio.org/rstudio-server-0.99.892-amd64.deb -P $HOME/
+gdebi $HOME/rstudio-server-0.99.892-amd64.deb -n
+echo "server-app-armor-enabled=0" >> /etc/rstudio/rserver.conf
+
+
 #BioConductor packages for R
 cd
 cat > install_update_bioconductor.r <<- EOM
@@ -55,14 +63,6 @@ biocLite("biomaRt")
 EOM
 chmod +x install_update_bioconductor.r
 ./install_update_bioconductor.r
-
-#Server install
-#apt-get install gdebi-core -y
-wget https://download2.rstudio.org/rstudio-server-0.99.892-amd64.deb -P $HOME/
-dpkg -i $HOME/rstudio-server-0.99.892-amd64.deb
-echo "server-app-armor-enabled=0" >> /etc/rstudio/rserver.conf
-#Run server
-/usr/lib/rstudio-server/bin/rserver
 
 
 #Add test user...
