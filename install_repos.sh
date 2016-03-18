@@ -24,6 +24,9 @@ gpg -a --export E084DAB9 | apt-key add -
 # Create a local repository for rstudio* packages
 mkdir -p "$LOCAL_REPO"
 echo "deb file:$LOCAL_REPO/ ./" > /etc/apt/sources.list.d/local-rstudio-repo.list
+
+# Pre-fill the local repository
+apt-get -y -qq install wget
 wget https://download1.rstudio.org/rstudio-0.99.892-amd64.deb -P "$LOCAL_REPO"
 wget https://download2.rstudio.org/rstudio-server-0.99.892-amd64.deb -P "$LOCAL_REPO"
 dpkg-scanpackages "$LOCAL_REPO" | gzip > "$LOCAL_REPO/Packages.gz"

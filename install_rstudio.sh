@@ -17,9 +17,9 @@
 source $(dirname $0)/install_common.sh
 
 # Install dependencies
-apt-get -y -qq install wget git libc6-dev cpp gcc g++ zlib1g-dev devscripts build-essential \
+apt-get -y -qq install wget curl vim git libc6-dev cpp gcc g++ zlib1g-dev devscripts build-essential \
                        rpm2cpio cpio libgstreamer-plugins-base0.10-0 libgstreamer0.10-0 libjpeg62 \
-                       liborc-0.4-0 libxslt1-dev libedit2 curl libcurl4-openssl-dev
+                       liborc-0.4-0 libxslt1-dev libedit2 libcurl4-openssl-dev
 
 # Install R
 apt-get -y -qq install r-base r-base-dev
