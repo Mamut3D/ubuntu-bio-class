@@ -24,9 +24,7 @@ apt-get -y -qq install wget git libc6-dev cpp gcc g++ zlib1g-dev devscripts buil
 # Install R
 apt-get -y -qq install r-base r-base-dev
 
-# Install RStudio and RStudio-server
-wget https://download1.rstudio.org/rstudio-0.99.892-amd64.deb -P /var/cache/apt/archives/
-wget https://download2.rstudio.org/rstudio-server-0.99.892-amd64.deb -P /var/cache/apt/archives/
+# Install RStudio and RStudio-server (from a local repository, see `install_repos.sh`)
 apt-get -y -qq install rstudio rstudio-server
 
 # Configure RServer to start in an environment without AppArmor

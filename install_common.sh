@@ -21,6 +21,7 @@ set -e
 INSTALL_PATH="/opt"
 TEMP_PATH="/tmp"
 PATH_FILE="$INSTALL_PATH/bio_paths.sh"
+LOCAL_REPO="/var/local-rstudio-repo"
 
 # User details
 USERNAME="student"
