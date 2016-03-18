@@ -22,7 +22,7 @@ apt-get -y -qq install wget curl vim git libc6-dev cpp gcc g++ zlib1g-dev devscr
                        liborc-0.4-0 libxslt1-dev libedit2 libcurl4-openssl-dev
 
 # Install R
-apt-get -y -qq install r-base r-base-dev
+apt-get -y -qq --force-yes install r-base r-base-dev
 
 # Install RStudio and RStudio-server (from a local repository, see `install_repos.sh`)
 apt-get -y -qq --force-yes install rstudio rstudio-server

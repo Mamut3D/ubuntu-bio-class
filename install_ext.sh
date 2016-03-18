@@ -21,7 +21,8 @@ echo > "$PATH_FILE"
 chmod 644 "$PATH_FILE"
 
 # Install dependencies
-apt-get -y -qq install libxi6 libxtst6 libxi6:i386 libxtst6:i386 rpm2cpio python-matplotlib
+apt-get -y -qq install rpm2cpio python-matplotlib
+#apt-get -y -qq install libxi6 libxtst6 libxi6:i386 libxtst6:i386
 
 # Install BIO tools available as official packages
 apt-get -y -qq install Picard-tools samtools default-jre FastQC Trimmomatic
@@ -55,9 +56,8 @@ echo "export PATH=\$PATH:$INSTALL_PATH/bcftools-1.3" >> "$PATH_FILE"
 # See http://jeff.wintersinger.org/posts/2013/07/how-to-run-454s-gs-de-novo-assembler-newbler-v28-in-ubuntu-1204/
 wget http://454.com/downloads/DataAnalysis_2.9_All_20130530_1559.tgz -P "$TEMP_PATH"
 tar -xzf "$TEMP_PATH/DataAnalysis_2.9_All_20130530_1559.tgz" -C "$TEMP_PATH"
-cd "$TEMP_PATH/DataAnalysis_2.9_All/packages"
-for RPM_PKG in *.rpm; do rpm2cpio $RPM_PKG | cpio -idmv; done
-rm -rf "$TEMP_PATH"/DataAnalysis_2.9_All*
+for RPM_PKG in "$TEMP_PATH"/DataAnalysis_2.9_All/packages/*.rpm; do rpm2cpio $RPM_PKG | cpio -idmv; done
+cd / && rm -rf "$TEMP_PATH"/DataAnalysis_2.9_All*
 echo "export PATH=\$PATH:$INSTALL_PATH/454/apps/assembly/bin" >> "$PATH_FILE"
 
 # Install SOAP2-denovo
