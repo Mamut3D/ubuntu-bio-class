@@ -29,7 +29,8 @@ echo "deb file:$LOCAL_REPO/ ./" > /etc/apt/sources.list.d/local-rstudio-repo.lis
 apt-get -y -qq install wget dpkg-dev
 wget https://download1.rstudio.org/rstudio-0.99.892-amd64.deb -P "$LOCAL_REPO"
 wget https://download2.rstudio.org/rstudio-server-0.99.892-amd64.deb -P "$LOCAL_REPO"
-dpkg-scanpackages "$LOCAL_REPO" | gzip > "$LOCAL_REPO/Packages.gz"
+cd "$LOCAL_REPO"
+dpkg-scanpackages . | gzip > ./Packages.gz
 
 # Update index
 apt-get update
