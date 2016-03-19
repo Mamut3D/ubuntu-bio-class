@@ -16,5 +16,14 @@
 
 source $(dirname $0)/../common/env.sh
 
+COMFY_CONFIG_URL="https://raw.githubusercontent.com/CESNET/comfy/master/lib/templates/ubuntu/files/sshd_config"
+LOCAL_SSHD_CONFIG="/etc/ssh/sshd_config"
+
+# Install
 apt-get -y -qq install openssh-server openssh-client
-# TODO: configure sshd for remote access (keys only)
+
+# Configure
+wget "$COMFY_CONFIG_URL" -O "$LOCAL_SSHD_CONFIG"
+
+# Restart services
+/usr/sbin/service ssh restart
