@@ -4,12 +4,14 @@ MAINTAINER MetaCloud Team <cloud@metacentrum.cz>
 LABEL name="ubuntu-bio-class" version="1.0" build="Sat Mar 19 17:38:52 CET 2016" license="Apache License, Version 2.0, January 2004"
 
 # Stage environment
-RUN mkdir -p /opt/ubuntu-bio-class
+RUN mkdir -p /opt/ubuntu-bio-class/common
+RUN mkdir -p /opt/ubuntu-bio-class/provision
+RUN mkdir -p /opt/ubuntu-bio-class/run
 
-# Copy installation & run scripts
-ADD common /opt/ubuntu-bio-class/
-ADD provision /opt/ubuntu-bio-class/
-ADD run /opt/ubuntu-bio-class/
+# Copy scripts
+ADD common /opt/ubuntu-bio-class/common/
+ADD provision /opt/ubuntu-bio-class/provision/
+ADD run /opt/ubuntu-bio-class/run/
 
 # Install software
 RUN /opt/ubuntu-bio-class/provision/install_repos.sh
