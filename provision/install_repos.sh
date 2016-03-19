@@ -34,3 +34,4 @@ dpkg-scanpackages . | gzip > ./Packages.gz
 
 # Update index
 apt-get update
+apt-get -y -qq upgrade
