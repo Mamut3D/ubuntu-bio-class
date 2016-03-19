@@ -21,4 +21,6 @@ source $(dirname $0)/change_passwd.sh
 /usr/sbin/service ssh start
 
 # Start RStudio server & block
+echo " * Starting RStudio-server service"
+echo "   ...done."
 /usr/lib/rstudio-server/bin/rserver --server-daemonize 0
