@@ -31,7 +31,7 @@ DOCKER_APPLIANCE="arax/ubuntu-bio-class"
 
 # Read password from a file, if not already set and the file is available
 if [ -z "$PASSWORD" ] && [ -f "$PASS_FILE" ] ; then
-    PASSWORD=$(cat "$PASS_FILE" | tr -d '\n')
+    PASSWORD=$(tr -d '\n' < "$PASS_FILE")
 fi
 
 # Move .ssh/authorized_keys, if necessary
@@ -58,8 +58,8 @@ done
 while true ; do
     /usr/bin/docker run --rm \
                         -p 2222:22 -p 8787:8787 \
-                        -v "$LOCAL_SHARED":"$CONTAINER_SHARED":ro -v "$LOCAL_PERSISTENT":"$CONTAINER_PERSISTENT" \
-                        -e "PASSWORD=$PASSWORD" \
-                        "$DOCKER_APPLIANCE"
+                        -v "$LOCAL_SHARED:$CONTAINER_SHARED:ro" -v "$LOCAL_PERSISTENT:$CONTAINER_PERSISTENT" \
+                        -e "\"PASSWORD=$PASSWORD\"" \
+                        "$DOCKER_APPLIANCE" || /bin/true
     sleep 5 # prevent quick restarts
 done
