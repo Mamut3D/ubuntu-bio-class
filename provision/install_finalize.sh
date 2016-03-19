@@ -14,6 +14,22 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
-source $(dirname $0)/install_common.sh
+source $(dirname $0)/../common/env.sh
 
-apt-get -y -qq install openssh-server openssh-client
+if [ ! -d "/home/$USERNAME" ] ; then
+    echo "User account for $USERNAME does not exist or is missing a home directory"
+    exit 1
+fi
+
+# Load custom paths
+cat >> "/home/$USERNAME/.bashrc" <<- EOF
+# Force UTF-8 locales
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
+# Load custom paths for BIO software
+if [ -f "$PATH_FILE" ]; then
+    source "$PATH_FILE"
+fi
+EOF

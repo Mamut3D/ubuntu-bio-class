@@ -1,4 +1,4 @@
-#!/bin/bash
+## Not executable
 
 # -------------------------------------------------------------------------- #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may    #
@@ -14,19 +14,41 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
-source $(dirname $0)/install_common.sh
+source $(dirname $0)/../common/env.sh
 
-# Install dependencies
-apt-get -y -qq install wget curl vim git libc6-dev cpp gcc g++ zlib1g-dev devscripts build-essential \
-                       rpm2cpio cpio libgstreamer-plugins-base0.10-0 libgstreamer0.10-0 libjpeg62 \
-                       liborc-0.4-0 libxslt1-dev libedit2 libcurl4-openssl-dev libcairo2-dev \
-                       mesa-common-dev libxt-dev libglu1-mesa-dev apg expect
+if [ ! -x "/usr/bin/apg" ] || [ ! -x "/usr/bin/expect" ] || [ ! -x  "/usr/bin/passwd" ] ; then
+    echo "Required binaries not present in the container: apg, expect, passwd"
+    exit 1
+fi
 
-# Install R
-apt-get -y -qq --force-yes install r-base r-base-dev
+# Generate a new password if not set
+if [ -z "$PASSWORD" ]; then
+    PASSWORD=$(/usr/bin/apg -m 25 -n 1)
+    echo "**********************************************"
+    echo "**********************************************"
+    echo "Generated password:  $PASSWORD"
+    echo "**********************************************"
+    echo "**********************************************"
+fi
 
-# Install RStudio and RStudio-server (from a local repository, see `install_repos.sh`)
-apt-get -y -qq --force-yes install rstudio rstudio-server
+# Set password
+cat > "$CHPASSWD" <<-EOF
+#!/usr/bin/expect
 
-# Configure RServer to start in an environment without AppArmor
-echo "server-app-armor-enabled=0" >> /etc/rstudio/rserver.conf
+spawn /usr/bin/passwd "$USERNAME"
+
+expect "Enter new UNIX password:"
+send "$PASSWORD\r"
+
+expect "Retype new UNIX password:"
+send "$PASSWORD\r"
+
+interact
+EOF
+
+chmod +x "$CHPASSWD"
+eval "$CHPASSWD" > /dev/null 2>&1
+
+# Clean-up
+rm "$CHPASSWD"
+unset PASSWORD

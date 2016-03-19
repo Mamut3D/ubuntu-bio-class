@@ -14,7 +14,7 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
-source $(dirname $0)/install_common.sh
+source $(dirname $0)/../common/env.sh
 
 # Add repositories
 echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" > /etc/apt/sources.list.d/rstudio-trusty.list

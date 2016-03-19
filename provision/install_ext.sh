@@ -14,7 +14,7 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
-source $(dirname $0)/install_common.sh
+source $(dirname $0)/../common/env.sh
 
 # Clean-up and set correct permissions on $PATH_FILE
 echo > "$PATH_FILE"
@@ -56,8 +56,10 @@ echo "export PATH=\$PATH:$INSTALL_PATH/bcftools-1.3" >> "$PATH_FILE"
 # See http://jeff.wintersinger.org/posts/2013/07/how-to-run-454s-gs-de-novo-assembler-newbler-v28-in-ubuntu-1204/
 wget http://454.com/downloads/DataAnalysis_2.9_All_20130530_1559.tgz -P "$TEMP_PATH"
 tar -xzf "$TEMP_PATH/DataAnalysis_2.9_All_20130530_1559.tgz" -C "$TEMP_PATH"
+cd /
 for RPM_PKG in "$TEMP_PATH"/DataAnalysis_2.9_All/packages/*.rpm; do rpm2cpio $RPM_PKG | cpio -idmv; done
-cd / && rm -rf "$TEMP_PATH"/DataAnalysis_2.9_All*
+cd /
+rm -rf "$TEMP_PATH"/DataAnalysis_2.9_All*
 echo "export PATH=\$PATH:$INSTALL_PATH/454/apps/assembly/bin" >> "$PATH_FILE"
 
 # Install SOAP2-denovo

@@ -1,4 +1,4 @@
-#!/bin/bash
+## Not executable
 
 # -------------------------------------------------------------------------- #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may    #
@@ -14,16 +14,16 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
-source $(dirname $0)/install_common.sh
+# End on any non-zero return code
+set -e
 
-# Add a non-root user account
-adduser "$USERNAME" --shell /bin/bash  --disabled-login
+# Paths
+INSTALL_PATH="/opt"
+TEMP_PATH="/tmp"
+PATH_FILE="$INSTALL_PATH/bio_paths.sh"
+LOCAL_REPO="/var/local-rstudio-repo"
+CHPASSWD="/tmp/chpasswd.xp"
 
-# Load custom paths
-cat >> "/home/$USERNAME/.bashrc" <<- EOF
-
-# Load custom paths for BIO software
-if [ -f "$PATH_FILE" ]; then
-	source "$PATH_FILE"
-fi
-EOF
+# User details
+USERNAME="student"
+#PASSWORD=""

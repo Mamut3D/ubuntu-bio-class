@@ -14,43 +14,19 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
-# End on any non-zero return code
-set -e
+source $(dirname $0)/../common/env.sh
 
-# TODO: load value from `install_common.sh`
-USERNAME="student"
-CHPASSWD="/tmp/chpasswd.xp"
+# Install dependencies
+apt-get -y -qq install wget curl vim git libc6-dev cpp gcc g++ zlib1g-dev devscripts build-essential \
+                       rpm2cpio cpio libgstreamer-plugins-base0.10-0 libgstreamer0.10-0 libjpeg62 \
+                       liborc-0.4-0 libxslt1-dev libedit2 libcurl4-openssl-dev libcairo2-dev \
+                       mesa-common-dev libxt-dev libglu1-mesa-dev apg expect
 
-# Generate a new password if not set
-if [ -z "$PASSWORD" ]; then
-  PASSWORD=$(/usr/bin/apg -m 25 -n 1)
-  echo "******************************"
-  echo "******************************"
-  echo "Generated password:  $PASSWORD"
-  echo "******************************"
-  echo "******************************"
-fi
+# Install R
+apt-get -y -qq --force-yes install r-base r-base-dev
 
-# Set password
-cat > "$CHPASSWD" <<-EOF
-#!/usr/bin/expect
+# Install RStudio and RStudio-server (from a local repository, see `install_repos.sh`)
+apt-get -y -qq --force-yes install rstudio rstudio-server
 
-spawn /usr/bin/passwd "$USERNAME"
-
-expect "Enter new UNIX password:"
-send "$PASSWORD\r"
-
-expect "Retype new UNIX password:"
-send "$PASSWORD\r"
-
-interact
-EOF
-chmod +x "$CHPASSWD"
-eval "$CHPASSWD"
-rm "$CHPASSWD"
-
-# start SSH server
-/usr/sbin/service ssh start
-
-# start RStudio server & block
-/usr/lib/rstudio-server/bin/rserver --server-daemonize 0
+# Configure RServer to start in an environment without AppArmor
+echo "server-app-armor-enabled=0" >> /etc/rstudio/rserver.conf

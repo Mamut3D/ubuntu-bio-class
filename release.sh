@@ -1,4 +1,4 @@
-## Not executable
+#!/bin/bash
 
 # -------------------------------------------------------------------------- #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may    #
@@ -13,15 +13,3 @@
 # See the License for the specific language governing permissions and        #
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
-
-# End on any non-zero return code
-set -e
-
-# Paths
-INSTALL_PATH="/opt"
-TEMP_PATH="/tmp"
-PATH_FILE="$INSTALL_PATH/bio_paths.sh"
-LOCAL_REPO="/var/local-rstudio-repo"
-
-# User details
-USERNAME="student"

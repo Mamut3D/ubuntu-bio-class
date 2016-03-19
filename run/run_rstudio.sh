@@ -14,4 +14,11 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
-source $(dirname $0)/install_common.sh
+# Change password for the default user
+source $(dirname $0)/change_passwd.sh
+
+# Start SSH server
+/usr/sbin/service ssh start
+
+# Start RStudio server & block
+/usr/lib/rstudio-server/bin/rserver --server-daemonize 0
