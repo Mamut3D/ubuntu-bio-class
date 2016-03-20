@@ -26,6 +26,7 @@ LOCAL_AUTH_KEYS_FILES="/root/.ssh/authorized_keys $HOME/.ssh/authorized_keys"
 CONTAINER_AUTH_KEYS_FILE_BASE="$LOCAL_PERSISTENT/.ssh"
 CONTAINER_AUTH_KEYS_FILE="$CONTAINER_AUTH_KEYS_FILE_BASE/authorized_keys"
 CONTAINER_BASHRC="$LOCAL_PERSISTENT/.bashrc"
+CONTAINER_PROFILE="$LOCAL_PERSISTENT/.profile"
 
 # Docker
 DOCKER_APPLIANCE="arax/ubuntu-bio-class"
@@ -47,9 +48,52 @@ for LOCAL_AUTH_KEYS_FILE in $LOCAL_AUTH_KEYS_FILES ; do
     fi
 done
 
+# Add profile
+if [ ! -f "$CONTAINER_PROFILE" ] ; then
+    cat > "$CONTAINER_PROFILE" <<- EOF
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "\$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "\$HOME/.bashrc" ]; then
+    . "\$HOME/.bashrc"
+    fi
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "\$HOME/bin" ] ; then
+    PATH="\$HOME/bin:\$PATH"
+fi
+EOF
+fi
+
 # Load custom paths
 if [ ! -f "$CONTAINER_BASHRC" ] ; then
     cat > "$CONTAINER_BASHRC" <<- EOF
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case \$- in
+    *i*) ;;
+      *) return;;
+esac
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
 # Force UTF-8 locales
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8

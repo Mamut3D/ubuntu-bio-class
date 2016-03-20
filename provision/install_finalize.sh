@@ -16,6 +16,11 @@
 
 source $(dirname $0)/../common/env.sh
 
+# Fix locales (attempt)
+locale-gen en_US || /bin/true
+locale-gen en_US.UTF-8 || /bin/true
+update-locale || /bin/true
+
 if [ ! -d "/home/$USERNAME" ] ; then
     echo "User account for $USERNAME does not exist or is missing a home directory"
     exit 1
