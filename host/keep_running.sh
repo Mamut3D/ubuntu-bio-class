@@ -25,6 +25,7 @@ CONTAINER_PERSISTENT="/home/$USERNAME"
 LOCAL_AUTH_KEYS_FILES="/root/.ssh/authorized_keys $HOME/.ssh/authorized_keys"
 CONTAINER_AUTH_KEYS_FILE_BASE="$LOCAL_PERSISTENT/.ssh"
 CONTAINER_AUTH_KEYS_FILE="$CONTAINER_AUTH_KEYS_FILE_BASE/authorized_keys"
+CONTAINER_BASHRC="$LOCAL_PERSISTENT/.bashrc"
 
 # Docker
 DOCKER_APPLIANCE="arax/ubuntu-bio-class"
@@ -45,6 +46,21 @@ for LOCAL_AUTH_KEYS_FILE in $LOCAL_AUTH_KEYS_FILES ; do
         break
     fi
 done
+
+# Load custom paths
+if [ ! -f "$CONTAINER_BASHRC" ] ; then
+    cat > "$CONTAINER_BASHRC" <<- EOF
+# Force UTF-8 locales
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
+# Load custom paths for BIO software
+if [ -f "$PATH_FILE" ]; then
+    source "$PATH_FILE"
+fi
+EOF
+fi
 
 # Run ubuntu-bio-class, reinitialize after failure (cannot use --restart=always)
 #
