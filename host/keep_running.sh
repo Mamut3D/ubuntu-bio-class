@@ -16,20 +16,21 @@
 
 source $(dirname $0)/../common/env.sh
 
-# Paths
-PASS_FILE="/root/ubuntu-bio-class.pass"
-LOCAL_SHARED="/data/shared"
-CONTAINER_SHARED="/data/shared"
-LOCAL_PERSISTENT="/data/permanent"
-CONTAINER_PERSISTENT="/home/$USERNAME"
-LOCAL_AUTH_KEYS_FILES="/root/.ssh/authorized_keys $HOME/.ssh/authorized_keys"
-CONTAINER_AUTH_KEYS_FILE_BASE="$LOCAL_PERSISTENT/.ssh"
-CONTAINER_AUTH_KEYS_FILE="$CONTAINER_AUTH_KEYS_FILE_BASE/authorized_keys"
-CONTAINER_BASHRC="$LOCAL_PERSISTENT/.bashrc"
-CONTAINER_PROFILE="$LOCAL_PERSISTENT/.profile"
+# Guard against cloud-init reboots
+if [ -d "$CI_BASE_DIR" ] && [ ! -f "$CI_PER_BOOT_SCRIPT" ] ; then
+    mkdir -p "$CI_PER_BOOT_SCRIPT_BASE"
 
-# Docker
-DOCKER_APPLIANCE="arax/ubuntu-bio-class"
+    cat > "$CI_PER_BOOT_SCRIPT" <<- EOF
+#!/bin/bash
+
+echo "Starting $DOCKER_APPLIANCE watchdog ..."
+$CI_SCRIPT_PATH &
+EOF
+    chmod +x "$CI_PER_BOOT_SCRIPT"
+
+    # We are done here
+    exit 0
+fi
 
 # Read password from a file, if not already set and the file is available
 if [ -z "$PASSWORD" ] && [ -f "$PASS_FILE" ] ; then
