@@ -106,6 +106,12 @@ fi
 EOF
 fi
 
+# Wait for resources
+until /usr/bin/docker info > /dev/null 2>&1 ; do
+    echo "Waiting for docker services to initialize ..."
+    sleep 5
+done
+
 # Run ubuntu-bio-class, reinitialize after failure (cannot use --restart=always)
 #
 # Forwarding:
@@ -115,7 +121,7 @@ fi
 # Mounts:
 #  => $LOCAL_SHARED     to $CONTAINER_SHARED     (ro)
 #  => $LOCAL_PERSISTENT to $CONTAINER_PERSISTENT (rw)
-while true ; do
+while /bin/true ; do
     /usr/bin/docker run --rm \
                         -p 2222:22 -p 8787:8787 \
                         -v "$LOCAL_SHARED:$CONTAINER_SHARED:ro" -v "$LOCAL_PERSISTENT:$CONTAINER_PERSISTENT" \
