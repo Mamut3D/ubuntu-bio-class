@@ -1,14 +1,31 @@
 FROM ubuntu:14.04
 
-MAINTAINER Radim Janca <janca@ics.muni.cz>
+MAINTAINER MetaCloud Team <cloud@metacentrum.cz>
+LABEL name="ubuntu-bio-class" version="1.0" build="Sat Mar 19 17:38:52 CET 2016" license="Apache License, Version 2.0, January 2004"
 
-# FedCloud stuff
-ADD InstallScript.sh /tmp/InstallScript.sh
-RUN /tmp/InstallScript.sh
+# Stage environment
+RUN mkdir -p /opt/ubuntu-bio-class/common
+RUN mkdir -p /opt/ubuntu-bio-class/provision
+RUN mkdir -p /opt/ubuntu-bio-class/run
 
-# Expose RStudio web default port
-EXPOSE 8787
+# Copy scripts
+ADD common /opt/ubuntu-bio-class/common/
+ADD provision /opt/ubuntu-bio-class/provision/
+ADD run /opt/ubuntu-bio-class/run/
 
-#Run server
-CMD ["/usr/lib/rstudio-server/bin/rserver","--server-daemonize","0"]
+# Install software
+RUN /opt/ubuntu-bio-class/provision/install_repos.sh
+RUN /opt/ubuntu-bio-class/provision/install_sshd.sh
+RUN /opt/ubuntu-bio-class/provision/install_rstudio.sh
+RUN /opt/ubuntu-bio-class/provision/install_ext.sh
+RUN /opt/ubuntu-bio-class/provision/install_users.sh
+RUN /opt/ubuntu-bio-class/provision/install_finalize.sh
 
+# Install bioconductor
+RUN /opt/ubuntu-bio-class/provision/install_bioconductor.r
+
+# Expose RStudio + SSH
+EXPOSE 8787 22
+
+# Start rstudio-server by default
+CMD /opt/ubuntu-bio-class/run/run_rstudio.sh
