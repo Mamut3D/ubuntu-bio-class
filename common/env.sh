@@ -17,13 +17,36 @@
 # End on any non-zero return code
 set -e
 
-# Paths
-INSTALL_PATH="/opt"
-TEMP_PATH="/tmp"
-PATH_FILE="$INSTALL_PATH/bio_paths.sh"
-LOCAL_REPO="/var/local-rstudio-repo"
-CHPASSWD="/tmp/chpasswd.xp"
+# Container details
+APPLIANCE_NAME="ubuntu-bio-class"
+DOCKER_APPLIANCE="arax/$APPLIANCE_NAME"
 
 # User details
 USERNAME="student"
 #PASSWORD=""
+
+# Paths
+INSTALL_PATH="/opt"
+TEMP_PATH="/tmp"
+PATH_FILE="$INSTALL_PATH/bio_paths.sh"
+
+LOCAL_REPO="/var/local-rstudio-repo"
+
+CHPASSWD="/tmp/chpasswd.xp"
+PASS_FILE="/root/$APPLIANCE_NAME.pass"
+
+LOCAL_SHARED="/data/shared"
+CONTAINER_SHARED="/data/shared"
+LOCAL_PERSISTENT="/data/permanent"
+CONTAINER_PERSISTENT="/home/$USERNAME"
+LOCAL_AUTH_KEYS_FILES="/root/.ssh/authorized_keys $HOME/.ssh/authorized_keys"
+
+CONTAINER_AUTH_KEYS_FILE_BASE="$LOCAL_PERSISTENT/.ssh"
+CONTAINER_AUTH_KEYS_FILE="$CONTAINER_AUTH_KEYS_FILE_BASE/authorized_keys"
+CONTAINER_BASHRC="$LOCAL_PERSISTENT/.bashrc"
+CONTAINER_PROFILE="$LOCAL_PERSISTENT/.profile"
+
+CI_BASE_DIR="/var/lib/cloud"
+CI_PER_BOOT_SCRIPT_BASE="$CI_BASE_DIR/scripts/per-boot"
+CI_PER_BOOT_SCRIPT="$CI_PER_BOOT_SCRIPT_BASE/kickstart_$APPLIANCE_NAME.sh"
+CI_SCRIPT_PATH="/root/$APPLIANCE_NAME/host/keep_running.sh"
