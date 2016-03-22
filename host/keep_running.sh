@@ -120,12 +120,12 @@ done
 #  => 8787 (RStudio-server)
 #
 # Mounts:
-#  => $LOCAL_SHARED     to $CONTAINER_SHARED     (ro)
+#  => $LOCAL_SHARED     to $CONTAINER_SHARED     (rw)
 #  => $LOCAL_PERSISTENT to $CONTAINER_PERSISTENT (rw)
 while /bin/true ; do
     /usr/bin/docker run --rm \
                         -p 2222:22 -p 8787:8787 \
-                        -v "$LOCAL_SHARED:$CONTAINER_SHARED:ro" -v "$LOCAL_PERSISTENT:$CONTAINER_PERSISTENT" \
+                        -v "$LOCAL_SHARED:$CONTAINER_SHARED" -v "$LOCAL_PERSISTENT:$CONTAINER_PERSISTENT" \
                         -e "PASSWORD=$PASSWORD" \
                         "$DOCKER_APPLIANCE" || /bin/true
     sleep 5 # prevent quick restarts
